@@ -6,13 +6,21 @@ function temperature_evolution()
     expA_dt = expm(A .* delta_t);
     surf(reshape(X, 40, 15))
     view([60 37]);
+    zlim([90 310]);
     pause(delta_t);
-    for t=0:iterations
-        X = expA_dt * X;
+    t = 0;
+    ecart_relatif_elem = 1;
+    while t<=iterations && max(ecart_relatif_elem(:)) > 0.0001
+        nouv_X = expA_dt * X;
+        ecart_relatif_elem = abs(nouv_X - X) ./ abs(X);
+        X = nouv_X;
         surf(reshape(X, 40, 15))
         view([60 37]);
+        zlim([90 310]);
         pause(delta_t);
         disp(t)
+        disp(max(ecart_relatif_elem(:)))
+        t = t+1;
     end
     disp("fini")
 end

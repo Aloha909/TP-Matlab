@@ -2,8 +2,8 @@ function temperature_evolution2()
     X = calcul_X_0();
     A = calcul_A();
     delta_t = 0.01;
-    iterations=1000;
-    ecart_relatif_arret = 0.01;
+    iterations=10000;
+    ecart_relatif_arret = 0.001;
     expA_dt = expm(A .* delta_t);
     surf(reshape(X, 40, 15))
     view([60 37]);
@@ -19,6 +19,7 @@ function temperature_evolution2()
         view([60 37]);
         pause(delta_t);
         disp(t)
+        disp(max(ecart_relatif_elem(:)))
         t = t+1;
     end
     disp("fini")
