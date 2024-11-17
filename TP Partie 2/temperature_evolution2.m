@@ -3,17 +3,23 @@ function temperature_evolution2()
     A = calcul_A();
     delta_t = 0.01;
     iterations=1000;
+    ecart_relatif_arret = 0.01;
     expA_dt = expm(A .* delta_t);
     surf(reshape(X, 40, 15))
     view([60 37]);
     pause(delta_t);
-    for t=0:iterations
-        X = expA_dt * X;
-        X = chauffer_X(X);
+    t=0;
+    ecart_relatif_elem = 1;
+    while t<=iterations && max(ecart_relatif_elem(:)) > ecart_relatif_arret
+        nouv_X = expA_dt * X;
+        nouv_X = chauffer_X(nouv_X);
+        ecart_relatif_elem = abs(nouv_X - X) ./ abs(X);
+        X = nouv_X;
         surf(reshape(X, 40, 15))
         view([60 37]);
         pause(delta_t);
         disp(t)
+        t = t+1;
     end
     disp("fini")
 end
