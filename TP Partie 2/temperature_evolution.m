@@ -1,18 +1,20 @@
 function temperature_evolution()
-    X = calcul_X_0();
-    A = calcul_A();
+    % Fonction qui calcule et affiche l'evolution naturelle de la temperature dans la piece metallique
+
+    X = calcul_X_0(); % calcule la repartition de temperature a l'equilibre de la partie precedente
+    A = calcul_A(); % calcule la matrice A dont on a besoin pour chaque iteration et ne depend que des conditions du probleme
     delta_t = 0.01;
     iterations=1000;
-    expA_dt = expm(A .* delta_t);
+    expA_dt = expm(A .* delta_t); % L'elevation a l'exponentielle permet d'obtenir U(t + delta_t) en fonction de U(t)
     surf(reshape(X, 40, 15))
-    view([60 37]);
-    zlim([90 310]);
+    view([60 37]); % Reglage de l'angle de vue
+    zlim([90 310]); % Reglage de l'echelle
     pause(delta_t);
     t = 0;
-    ecart_relatif_elem = 1;
+    ecart_relatif_elem = 1; % Permet de rentrer la premiere fois dans la boucle
     while t<=iterations && max(ecart_relatif_elem(:)) > 0.0001
         nouv_X = expA_dt * X;
-        ecart_relatif_elem = abs(nouv_X - X) ./ abs(X);
+        ecart_relatif_elem = abs(nouv_X - X) ./ abs(X); % On se base sur l'ecart relatif element par element pour savoir si la solution stagne
         X = nouv_X;
         surf(reshape(X, 40, 15))
         view([60 37]);
